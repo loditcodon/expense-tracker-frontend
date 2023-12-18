@@ -9,6 +9,7 @@ import AuthService from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
 function Navigation({ active, setActive }) {
     const {totalExpenses,incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses, userinfo, getUserinfo, editUserinfo } = useGlobalContext()
+    // const updatedUserinfo = getUserinfo();
     const [currentUser, setCurrentUser] = useState(undefined);
     const navigate = useNavigate();
     const handleSignOut = () => {
@@ -17,13 +18,13 @@ function Navigation({ active, setActive }) {
         navigate("/");
         window.location.reload();
       };
-    
+    // console.log(updatedUserinfo);
     return (
         <NavStyled>
             <div className="user-con">
                 <img src={avatar} alt="" />
                 <div className="text">
-                    <h2>Nguyen Duy Huy Hoang</h2>
+                    <h2>{userinfo.nickname}</h2>
                     <p>$ {totalBalance()}</p>
                 </div>
             </div>
