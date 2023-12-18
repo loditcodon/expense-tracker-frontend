@@ -8,7 +8,9 @@ import IncomeItem from '../IncomeItem/IncomeItem';
 function Income() {
     const {addIncome,incomes, getIncomes, deleteIncome, totalIncome} = useGlobalContext()
     const [titlex, setTitle] = useState(""); 
-
+    const formatNumberWithCommas = (number) => {
+        return `$ ${number.toLocaleString()}`;
+    };;
     const handleChange = (event) => {
         setTitle(event.target.value);
     }
@@ -45,7 +47,7 @@ function Income() {
                                 id={_id} 
                                 title={title} 
                                 description={description} 
-                                amount={amount} 
+                                amount={formatNumberWithCommas(amount)} 
                                 date={date} 
                                 type={type}
                                 category={category} 

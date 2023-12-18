@@ -6,32 +6,36 @@ function History() {
     const {transactionHistory} = useGlobalContext()
 
     const [...history] = transactionHistory()
-
+    const formatNumberWithCommas = (number) => {
+        return number.toLocaleString();
+    };
     return (
         <HistoryStyled>
             <h2>Recent History</h2>
-            {history.map((item) =>{
-                const {_id, title, amount, type} = item
+            {history.map((item) => {
+                const { _id, title, amount, type } = item;
                 return (
                     <div key={_id} className="history-item">
-                        <p style={{
-                            color: type === 'expense' ? 'red' : 'var(--color-green)'
-                        }}>
+                        <p
+                            style={{
+                                color: type === 'expense' ? 'red' : 'var(--color-green)',
+                            }}
+                        >
                             {title}
                         </p>
 
-                        <p style={{
-                            color: type === 'expense' ? 'red' : 'var(--color-green)'
-                        }}>
-                            {
-                                type === 'expense' ? `-${amount <= 0 ? 0 : amount}` : `+${amount <= 0 ? 0: amount}`
-                            }
+                        <p
+                            style={{
+                                color: type === 'expense' ? 'red' : 'var(--color-green)',
+                            }}
+                        >
+                            {type === 'expense' ? `-${formatNumberWithCommas(amount <= 0 ? 0 : amount)}` : `+${formatNumberWithCommas(amount <= 0 ? 0 : amount)}`}$
                         </p>
                     </div>
-                )
+                );
             })}
         </HistoryStyled>
-    )
+    );
 }
 
 const HistoryStyled = styled.div`

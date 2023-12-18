@@ -62,7 +62,7 @@ function IncomeItem({
         }
     }
 
-    console.log('type', type)
+    // console.log('type', type)
 
     return (
         <IncomeItemStyled indicator={indicatorColor}>

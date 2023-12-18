@@ -8,10 +8,12 @@ import ExpenseForm from './ExpenseForm';
 import { logout, trend } from '../../utils/Icons';
 
 function Expenses() {
-    const {addIncome,expenses, getExpenses, deleteExpense, totalExpenses} = useGlobalContext()
+    const {addIncome, expenses, getExpenses, deleteExpense, totalExpenses} = useGlobalContext()
     const [titlex, setTitle] = useState(""); 
 
-
+    const formatNumberWithCommas = (number) => {
+        return `$ ${number.toLocaleString()}`;
+    };
     const handleChange = (event) => {
         setTitle(event.target.value);
     }
@@ -50,7 +52,7 @@ function Expenses() {
                                 id={_id} 
                                 title={title} 
                                 description={description} 
-                                amount={amount} 
+                                amount={formatNumberWithCommas(amount)} 
                                 date={date} 
                                 type={type}
                                 category={category} 

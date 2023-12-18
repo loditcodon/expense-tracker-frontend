@@ -8,11 +8,10 @@ import { dollar } from '../../utils/Icons';
 import AuthService from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
 function Navigation({ active, setActive }) {
-    const {totalExpenses,incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses } = useGlobalContext()
+    const {totalExpenses,incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses, userinfo, getUserinfo, editUserinfo } = useGlobalContext()
     const [currentUser, setCurrentUser] = useState(undefined);
     const navigate = useNavigate();
     const handleSignOut = () => {
-        
         AuthService.logout();
         setCurrentUser(undefined); 
         navigate("/");
@@ -25,7 +24,7 @@ function Navigation({ active, setActive }) {
                 <img src={avatar} alt="" />
                 <div className="text">
                     <h2>Nguyen Duy Huy Hoang</h2>
-                    <p>{dollar} {totalBalance()}</p>
+                    <p>$ {totalBalance()}</p>
                 </div>
             </div>
             <ul className="menu-items">
@@ -41,10 +40,15 @@ function Navigation({ active, setActive }) {
                 })}
             </ul>
             <div className="bottom-nav">
-                <li onClick={handleSignOut}>
-                {signout} Sign Out
-                </li>
-            </div>
+                <li onClick={handleSignOut} style={{ 
+                    border: '2px solid #fff', 
+                    borderRadius: '10px', 
+                    padding: '8px',
+                    display: 'inline-block',
+                }}>
+        {signout} Sign Out
+      </li>
+    </div>
         </NavStyled>
     )
 }

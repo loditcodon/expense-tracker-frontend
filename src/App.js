@@ -17,13 +17,13 @@ import Navigation from './components/Navigation/Navigation'
 import Dashboard from './components/Dashboard/Dashboard';
 import Income from './components/Income/Income'
 import Expenses from './components/Expenses/Expenses';
+import Userinfo from './components/Profile/Userinfo';
 import { useGlobalContext } from './context/globalContext';
 // import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 const App = () => {
   const [currentUser, setCurrentUser] = useState(undefined);
   const global = useGlobalContext();
-  console.log(global);
   const [active, setActive] = useState(1);
   useEffect(() => {
     const user = AuthService.getCurrentUser();
@@ -50,6 +50,8 @@ const App = () => {
         return <Income />;
       case 4: 
         return <Expenses />;
+      case 5: 
+        return <Userinfo />;
       default: 
         return <Dashboard />;
     }

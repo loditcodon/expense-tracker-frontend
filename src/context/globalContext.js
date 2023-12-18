@@ -4,14 +4,17 @@ import AuthService from "../services/auth.service";
 
 const BASE_URL = "http://localhost:5000/api/v1/";
 const GlobalContext = React.createContext();
-
+const formatNumberWithCommas = (number) => {
+    return number.toLocaleString(); 
+}
 export const GlobalProvider = ({ children }) => {
     const currentUser = AuthService.getCurrentUser();
     const accessToken = AuthService.getAccessToken();
     const [incomes, setIncomes] = useState([]);
     const [expenses, setExpenses] = useState([]);
+    const [userinfo, setUserinfo] = useState([]);
     const [error, setError] = useState(null);
-    console.log(currentUser);
+    // console.log(currentUser);
     // calculate incomes
     const addIncome = async (income) => {
         try {
@@ -20,8 +23,7 @@ export const GlobalProvider = ({ children }) => {
                     'token': accessToken
                 }
             });
-            // In ra phản hồi từ máy chủ
-            console.log(response);
+            // console.log(response);
     
             getIncomes();
         } catch (err) {
@@ -36,7 +38,7 @@ export const GlobalProvider = ({ children }) => {
             }
         });
         setIncomes(response.data);
-        console.log(response.data);
+        // console.log(response.data);
     }
 
     const deleteIncome = async (id) => {
@@ -76,7 +78,7 @@ export const GlobalProvider = ({ children }) => {
             }
         });
         setExpenses(response.data);
-        console.log(response.data);
+        // console.log(response.data);
     }
 
     const deleteExpense = async (id) => {
@@ -109,7 +111,25 @@ export const GlobalProvider = ({ children }) => {
 
         return history.slice(0, 3);
     }
-
+    const getUserinfo = async () => {
+        const response = await axios.get(`${BASE_URL}${currentUser}/getUserProfile`, {
+            headers: {
+                'token': accessToken
+            }
+        });
+        setUserinfo(response.data);
+        
+    }
+    const editUserinfo = async (expense) => {
+        const response = await axios.post(`${BASE_URL}${currentUser}/editUserProfile`, expense, {
+            headers: {
+                'token': accessToken
+            }
+        }).catch((err) => {
+            setError(err.response.data.message);
+        });
+        getUserinfo();
+    }
     return (
         <GlobalContext.Provider value={{
             addIncome,
@@ -117,15 +137,18 @@ export const GlobalProvider = ({ children }) => {
             incomes,
             deleteIncome,
             expenses,
-            totalIncome,
             addExpense,
             getExpenses,
             deleteExpense,
-            totalExpenses,
-            totalBalance,
+            totalIncome: () => formatNumberWithCommas(totalIncome()),
+            totalExpenses: () => formatNumberWithCommas(totalExpenses()),
+            totalBalance: () => formatNumberWithCommas(totalBalance()),
             transactionHistory,
             error,
-            setError
+            setError,
+            getUserinfo,
+            editUserinfo,
+            userinfo
         }}>
             {children}
         </GlobalContext.Provider>

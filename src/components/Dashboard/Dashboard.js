@@ -4,14 +4,19 @@ import { useGlobalContext } from '../../context/globalContext';
 import History from '../../History/History';
 import { InnerLayout } from '../../styles/Layouts';
 import { dollar } from '../../utils/Icons';
+import { userinfoicon } from '../../utils/Icons';
+import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import Chart from '../Chart/Chart';
 
 function Dashboard() {
-    const {totalExpenses,incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses } = useGlobalContext()
-
+    const {totalExpenses, incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses, userinfo, getUserinfo, editUserinfo } = useGlobalContext()
+    const formatNumberWithCommas = (number) => {
+        return number.toLocaleString();
+    };
     useEffect(() => {
         getIncomes()
         getExpenses()
+        getUserinfo()
     }, [])
 
     return (
@@ -25,19 +30,19 @@ function Dashboard() {
                             <div className="income">
                                 <h2>Total Income</h2>
                                 <p>
-                                    {dollar} {totalIncome()}
+                                $ {totalIncome()}
                                 </p>
                             </div>
                             <div className="expense">
                                 <h2>Total Expense</h2>
                                 <p>
-                                    {dollar} {totalExpenses()}
+                                    $ {totalExpenses()}
                                 </p>
                             </div>
                             <div className="balance">
                                 <h2>Total Balance</h2>
                                 <p>
-                                    {dollar} {totalBalance()}
+                                    $ {totalBalance()}
                                 </p>
                             </div>
                         </div>
@@ -47,19 +52,19 @@ function Dashboard() {
                         <h2 className="salary-title">Min <span>Salary</span>Max</h2>
                         <div className="salary-item">
                             <p>
-                                ${Math.min(...incomes.map(item => item.amount))}
+                                ${incomes.length > 0 ? formatNumberWithCommas(Math.min(...incomes.map(item => item.amount))) : 'N/A'}
                             </p>
                             <p>
-                                ${Math.max(...incomes.map(item => item.amount))}
+                                ${incomes.length > 0 ? formatNumberWithCommas(Math.max(...incomes.map(item => item.amount))) : 'N/A'}
                             </p>
                         </div>
                         <h2 className="salary-title">Min <span>Expense</span>Max</h2>
                         <div className="salary-item">
                             <p>
-                                ${Math.min(...expenses.map(item => item.amount))}
+                                ${expenses.length > 0 ? formatNumberWithCommas(Math.min(...expenses.map(item => item.amount))) : 'N/A'}
                             </p>
                             <p>
-                                ${Math.max(...expenses.map(item => item.amount))}
+                                ${expenses.length > 0 ? formatNumberWithCommas(Math.max(...expenses.map(item => item.amount))) : 'N/A'}
                             </p>
                         </div>
                     </div>
@@ -135,9 +140,10 @@ const DashboardStyled = styled.div`
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                p{
+                p {
                     font-weight: 600;
                     font-size: 1.6rem;
+                    white-space: nowrap;
                 }
             }
         }
