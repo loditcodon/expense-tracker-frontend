@@ -1,5 +1,5 @@
 // UserinfoForm.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { useGlobalContext } from '../../context/globalContext';
 import Button from '../Button/Button';
@@ -12,29 +12,40 @@ function UserinfoForm() {
         phone_number: userinfo.phone_number,
         nickname: userinfo.nickname,
         oldPassword: '',
-        password: '',
+        newPassword: '',
+    });
+    const [passwordState, setPasswordState] = useState({
+        oldPassword: '',
+        newPassword: '',
     });
 
-    const { user_name, email, phone_number, nickname, password, oldPassword } = inputState;
-
+    const { user_name, email, phone_number, nickname } = inputState;
+    const { newPassword, oldPassword } = passwordState;
+    const [showOldPassword, setShowOldPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
     const handleInput = (name) => (e) => {
         setInputState({ ...inputState, [name]: e.target.value });
+        setPasswordState({ ...passwordState, [name]: e.target.value });
         setError('');
     };
-
-    const handleSubmit = (e) => {
+    const handleToggleOldPassword = () => {
+        setShowOldPassword(!showOldPassword);
+    };
+    const handleToggleNewPassword = () => {
+        setShowNewPassword(!showNewPassword);
+    };
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        editUserinfo(inputState);
+        await editUserinfo(inputState)
+        const updatedUserinfo = await getUserinfo();
+        
         setInputState({
-            user_name: '',
-            email: '',
-            phone_number: '',
-            nickname: '',
-            password: '',
-            oldPassword: '',
+            user_name: updatedUserinfo.user_name,
+            email: updatedUserinfo.email,
+            phone_number: updatedUserinfo.phone_number,
+            nickname: updatedUserinfo.nickname,
         });
     };
-
     return (
         <UserFormStyled onSubmit={handleSubmit}>
             {error && <p className="error">{error}</p>}
@@ -94,33 +105,43 @@ function UserinfoForm() {
             </div>
             <div className="input-control">
                 <div className="input-wrapper">
-                <label htmlFor="password">Old Password</label>
-                    <input
-                        type="password"
-                        value={oldPassword}
-                        name={'password'}
-                        id="password"
-                        placeholder="Old Password"
-                        onChange={handleInput('password')}
-                    />
+                    <label htmlFor="oldPassword">Old Password</label>
+                    <div className="password-input-wrapper">
+                        <input
+                            type={showOldPassword ? "text" : "password"}
+                            value={oldPassword}
+                            name={'oldPassword'}
+                            id="oldPassword"
+                            placeholder="Old Password"
+                            onChange={handleInput('oldPassword')}
+                        />
+                        <span className="eye-icon" onClick={handleToggleOldPassword}>
+                            {showOldPassword ? "👁️" : "👁️‍🗨️"}
+                        </span>
+                    </div>
                 </div>
             </div>
             <div className="input-control">
                 <div className="input-wrapper">
-                <label htmlFor="password">New Password</label>
-                    <input
-                        type="password"
-                        value={password}
-                        name={'password'}
-                        id="password"
-                        placeholder="New Password"
-                        onChange={handleInput('password')}
-                    />
+                    <label htmlFor="newPassword">New Password</label>
+                    <div className="password-input-wrapper">
+                        <input
+                            type={showNewPassword ? "text" : "password"}
+                            value={newPassword}
+                            name={'newPassword'}
+                            id="newPassword"
+                            placeholder="New Password"
+                            onChange={handleInput('newPassword')}
+                        />
+                        <span className="eye-icon" onClick={handleToggleNewPassword}>
+                            {showNewPassword ? "👁️" : "👁️‍🗨️"}
+                        </span>
+                    </div>
                 </div>
             </div>
             <div className="submit-btn">
                 <Button
-                    name={'Update User'}
+                    name={'Save'}
                     bPad={'.8rem 1.6rem'}
                     bRad={'30px'}
                     bg={'var(--color-accent'}
@@ -194,7 +215,19 @@ const UserFormStyled = styled.form`
             }
         }
     }
-    
+    .password-input-wrapper {
+        width: 500px;
+        position: relative;
+    }
+
+    .eye-icon {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 1.5rem; /* Tùy chỉnh kích thước của biểu tượng */
+    }   
 `;
 
 export default UserinfoForm;

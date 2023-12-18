@@ -120,15 +120,15 @@ export const GlobalProvider = ({ children }) => {
         setUserinfo(response.data);
         
     }
-    const editUserinfo = async (expense) => {
-        const response = await axios.post(`${BASE_URL}${currentUser}/editUserProfile`, expense, {
+    const editUserinfo = async (userinfo) => {
+        const response = await axios.post(`${BASE_URL}${currentUser}/editUserProfile`, userinfo, {
             headers: {
                 'token': accessToken
             }
         }).catch((err) => {
             setError(err.response.data.message);
         });
-        getUserinfo();
+        // getUserinfo();
     }
     return (
         <GlobalContext.Provider value={{

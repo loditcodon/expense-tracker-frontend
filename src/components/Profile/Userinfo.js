@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { InnerLayout } from '../../styles/Layouts';
 import { useGlobalContext } from '../../context/globalContext';
@@ -7,8 +7,10 @@ import Form from '../Form/Form';
 import { logout, trend } from '../../utils/Icons';
 
 function Userinfo() {
-    const { totalExpenses, incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses, userinfo, getUserinfo, editUserinfo } = useGlobalContext();
-
+    const { userinfo, getUserinfo, editUserinfo } = useGlobalContext();
+    useEffect(() =>{
+        getUserinfo()
+    }, [])
     return (
         <UserProfileStyled>
             <InnerLayout>
