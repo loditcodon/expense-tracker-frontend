@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { useGlobalContext } from '../../context/globalContext';
 import Button from '../Button/Button';
-
+import { upload } from './Firebase'
+import AuthService from "../../services/auth.service";
+import { firebaseConfig } from './Firebase';
 function UserinfoForm() {
     const { userinfo, getUserinfo, editUserinfo, error, setError } = useGlobalContext();
     const [inputState, setInputState] = useState({
@@ -46,6 +48,20 @@ function UserinfoForm() {
             nickname: updatedUserinfo.nickname,
         });
     };
+    const currentUser = AuthService.getCurrentUser();
+    const [avatar, setAvatar] = useState(null);
+    const [loading, setLoading] = useState(false);
+    
+      const [photo, setPhoto] = useState(null);
+      const [photoURL, setPhotoURL] = useState("https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png");
+      function handleChange(e) {
+        if (e.target.files[0]) {
+          setPhoto(e.target.files[0])
+        }
+      }
+      function handleClick() {
+        upload(photo, currentUser, setLoading);
+      }
     return (
         <UserFormStyled onSubmit={handleSubmit}>
             {error && <p className="error">{error}</p>}
@@ -148,6 +164,38 @@ function UserinfoForm() {
                     color={'#fff'}
                 />
             </div>
+            {currentUser && (
+  <div className="avatar-preview">
+    <label htmlFor="avatarInput" className="avatar-label">
+      <img
+        src={`https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${currentUser}.png?alt=media`}
+        alt="Avatar"
+      />
+      <div className="upload-overlay">
+        {!photo && (
+          <>
+            <span role="img" aria-label="Camera Emoji">
+              📷
+            </span>
+            <p>Upload Photo</p>
+          </>
+        )}
+      </div>
+      <input
+        type="file"
+        id="avatarInput"
+        onChange={handleChange}
+        style={{ display: 'none' }}
+      />
+    </label>
+    {photo && (
+      <button disabled={!photo} onClick={handleClick}>
+        Upload
+      </button>
+    )}
+  </div>
+)}
+            
         </UserFormStyled>
     );
 }
@@ -228,6 +276,34 @@ const UserFormStyled = styled.form`
         cursor: pointer;
         font-size: 1.5rem; /* Tùy chỉnh kích thước của biểu tượng */
     }   
+    .avatar-label {
+        position: relative;
+        cursor: pointer;
+      }
+      
+      .upload-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.7);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+      
+      .upload-overlay span,
+      .upload-overlay p {
+        margin: 0;
+      }
+      
+      .avatar-label:hover .upload-overlay {
+        opacity: 1;
+      }
 `;
 
 export default UserinfoForm;
