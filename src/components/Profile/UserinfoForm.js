@@ -7,9 +7,10 @@ import { upload } from './Firebase'
 import { storage } from "./Firebase";
 import AuthService from "../../services/auth.service";
 import { firebaseConfig } from './Firebase';
+import avatar from '../../img/avatar.png'
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 function UserinfoForm() {
-    const { userinfo, getUserinfo, editUserinfo, error, setError } = useGlobalContext();
+    const { userinfo, getUserinfo, editUserinfo, error, setError, editPassword } = useGlobalContext();
     const [inputState, setInputState] = useState({
         user_name: userinfo.user_name,
         email: userinfo.email,
@@ -38,7 +39,7 @@ function UserinfoForm() {
     const handleToggleNewPassword = () => {
         setShowNewPassword(!showNewPassword);
     };
-    const handleSubmit = async (e) => {
+    const handleProfileUpdate = async (e) => {
         e.preventDefault();
         await editUserinfo(inputState)
         const updatedUserinfo = await getUserinfo();
@@ -50,20 +51,24 @@ function UserinfoForm() {
             nickname: updatedUserinfo.nickname,
         });
     };
+    const handleChangePassword = async (e) => {
+        e.preventDefault();
+        await editPassword(passwordState)
+      };
     const currentUser = AuthService.getCurrentUser();
-      const [photo, setPhoto] = useState(null);
-      const [photoURL, setPhotoURL] = useState(null);
-      function handleChange(e) {
+    const [photo, setPhoto] = useState(null);
+    const [photoURL, setPhotoURL] = useState(null);
+    function handleChange(e) {
         if (e.target.files[0]) {
           setPhoto(e.target.files[0])
         }
-      }
-      const imageRef = ref(storage, currentUser);
-      getDownloadURL(imageRef)
-              .then((url) => {
-                setPhotoURL(url);
-              })
-      function handleClick() {
+    }
+    const imageRef = ref(storage, currentUser);
+    getDownloadURL(imageRef)
+        .then((url) => {
+            setPhotoURL(url);
+    })
+    function handleClick() {
         const imageRef = ref(storage, currentUser);
         uploadBytes(imageRef, photo)
           .then(() => {
@@ -72,16 +77,14 @@ function UserinfoForm() {
                 setPhotoURL(url);
               })
               .catch((error) => {
-                console.log(error.message, "error getting the image url");
               });
               setPhoto(null);
           })
           .catch((error) => {
-            console.log(error.message);
           });
-      }
+    }
     return (
-        <UserFormStyled onSubmit={handleSubmit}>
+        <UserFormStyled>
             {error && <p className="error">{error}</p>}
             <div className="input-control">
                 
@@ -137,6 +140,17 @@ function UserinfoForm() {
                     />
                 </div>
             </div>
+            <div className="submit-btn">
+                <Button
+                    name={'Update Profile'}
+                    bPad={'.8rem 1.6rem'}
+                    bRad={'30px'}
+                    bg={'var(--color-accent'}
+                    color={'#fff'}
+                    onClick={handleProfileUpdate}
+                />
+            </div>
+            
             <div className="input-control">
                 <div className="input-wrapper">
                     <label htmlFor="oldPassword">Old Password</label>
@@ -175,18 +189,19 @@ function UserinfoForm() {
             </div>
             <div className="submit-btn">
                 <Button
-                    name={'Save'}
+                    name={'Change Password'}
                     bPad={'.8rem 1.6rem'}
                     bRad={'30px'}
                     bg={'var(--color-accent'}
                     color={'#fff'}
+                    onClick={handleChangePassword}
                 />
             </div>
             {currentUser && (
             <div className="avatar-preview">
                 <label htmlFor="avatarInput" className="avatar-label">
                 <img
-                src={photoURL}
+                src={photoURL || avatar}
                 alt="Avatar"
                 sx={{ width: 150, height: 150 }}
                 />

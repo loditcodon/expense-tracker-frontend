@@ -121,15 +121,47 @@ export const GlobalProvider = ({ children }) => {
         
     }
     const editUserinfo = async (userinfo) => {
-        const response = await axios.post(`${BASE_URL}${currentUser}/editUserProfile`, userinfo, {
-            headers: {
-                'token': accessToken
+        try{
+            const response = await axios.post(`${BASE_URL}${currentUser}/editUserProfile`, userinfo, {
+                headers: {
+                    'token': accessToken
+                }
+                });
+                
+                if (response.data && response.data.errMessaging) {
+                    setError(response.data.errMessaging);
+                    setTimeout(() => {
+                        setError(null);
+                    }, 3000);
+                }
+        } catch (err) {
+            setError(err.response.data.errMessaging);
+            setTimeout(() => {
+                setError(null);
+            }, 3000);
+        }
+    };
+    const editPassword = async (passwordinfo) => {
+        try {
+            const response = await axios.put(`${BASE_URL}editpassword/${currentUser}`, passwordinfo, {
+                headers: {
+                    'token': accessToken
+                }
+            });
+            
+            if (response.data && response.data.error) {
+                setError(response.data.error);
+                setTimeout(() => {
+                    setError(null);
+                }, 3000);
             }
-        }).catch((err) => {
-            setError(err.response.data.message);
-        });
-        // getUserinfo();
-    }
+        } catch (err) {
+            setError(err.response.data.error);
+            setTimeout(() => {
+                setError(null);
+            }, 3000);
+        }
+    };
     return (
         <GlobalContext.Provider value={{
             addIncome,
@@ -148,7 +180,8 @@ export const GlobalProvider = ({ children }) => {
             setError,
             getUserinfo,
             editUserinfo,
-            userinfo
+            userinfo,
+            editPassword
         }}>
             {children}
         </GlobalContext.Provider>

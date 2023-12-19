@@ -7,10 +7,19 @@ import { useGlobalContext } from '../../context/globalContext';
 import { dollar } from '../../utils/Icons';
 import AuthService from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../Profile/Firebase";
 function Navigation({ active, setActive }) {
     const {totalExpenses,incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses, userinfo, getUserinfo, editUserinfo } = useGlobalContext()
     // const updatedUserinfo = getUserinfo();
     const [currentUser, setCurrentUser] = useState(undefined);
+    const currentUser_id = AuthService.getCurrentUser();
+    const imageRef = ref(storage, currentUser_id);
+    const [photoURL, setPhotoURL] = useState(null);
+    getDownloadURL(imageRef)
+            .then((url) => {
+              setPhotoURL(url);
+            })
     const navigate = useNavigate();
     const handleSignOut = () => {
         AuthService.logout();
@@ -18,11 +27,10 @@ function Navigation({ active, setActive }) {
         navigate("/");
         window.location.reload();
       };
-    // console.log(updatedUserinfo);
     return (
         <NavStyled>
             <div className="user-con">
-                <img src={avatar} alt="" />
+                <img src={photoURL || avatar} alt="" />
                 <div className="text">
                     <h2>{userinfo.nickname}</h2>
                     <p>$ {totalBalance()}</p>
