@@ -16,7 +16,7 @@ export const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const storage = getStorage();
+export const storage = getStorage(app);
 export async function upload(file, currentUser, setLoading) {
     const fileRef = ref(storage, currentUser + '.png');
   

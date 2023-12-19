@@ -4,8 +4,10 @@ import styled from 'styled-components';
 import { useGlobalContext } from '../../context/globalContext';
 import Button from '../Button/Button';
 import { upload } from './Firebase'
+import { storage } from "./Firebase";
 import AuthService from "../../services/auth.service";
 import { firebaseConfig } from './Firebase';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 function UserinfoForm() {
     const { userinfo, getUserinfo, editUserinfo, error, setError } = useGlobalContext();
     const [inputState, setInputState] = useState({
@@ -49,18 +51,34 @@ function UserinfoForm() {
         });
     };
     const currentUser = AuthService.getCurrentUser();
-    const [avatar, setAvatar] = useState(null);
-    const [loading, setLoading] = useState(false);
-    
       const [photo, setPhoto] = useState(null);
-      const [photoURL, setPhotoURL] = useState("https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png");
+      const [photoURL, setPhotoURL] = useState(null);
       function handleChange(e) {
         if (e.target.files[0]) {
           setPhoto(e.target.files[0])
         }
       }
+      const imageRef = ref(storage, currentUser);
+      getDownloadURL(imageRef)
+              .then((url) => {
+                setPhotoURL(url);
+              })
       function handleClick() {
-        upload(photo, currentUser, setLoading);
+        const imageRef = ref(storage, currentUser);
+        uploadBytes(imageRef, photo)
+          .then(() => {
+            getDownloadURL(imageRef)
+              .then((url) => {
+                setPhotoURL(url);
+              })
+              .catch((error) => {
+                console.log(error.message, "error getting the image url");
+              });
+              setPhoto(null);
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
       }
     return (
         <UserFormStyled onSubmit={handleSubmit}>
@@ -165,36 +183,38 @@ function UserinfoForm() {
                 />
             </div>
             {currentUser && (
-  <div className="avatar-preview">
-    <label htmlFor="avatarInput" className="avatar-label">
-      <img
-        src={`https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${currentUser}.png?alt=media`}
-        alt="Avatar"
-      />
-      <div className="upload-overlay">
-        {!photo && (
-          <>
-            <span role="img" aria-label="Camera Emoji">
-              📷
-            </span>
-            <p>Upload Photo</p>
-          </>
-        )}
-      </div>
-      <input
-        type="file"
-        id="avatarInput"
-        onChange={handleChange}
-        style={{ display: 'none' }}
-      />
-    </label>
-    {photo && (
-      <button disabled={!photo} onClick={handleClick}>
-        Upload
-      </button>
-    )}
-  </div>
-)}
+            <div className="avatar-preview">
+                <label htmlFor="avatarInput" className="avatar-label">
+                <img
+                src={photoURL}
+                alt="Avatar"
+                sx={{ width: 150, height: 150 }}
+                />
+
+                <div className="upload-overlay">
+                    {!photo && (
+                    <>
+                        <span role="img" aria-label="Camera Emoji">
+                        📷
+                        </span>
+                        <p>Upload Photo</p>
+                    </>
+                    )}
+                </div>
+                <input
+                    type="file"
+                    id="avatarInput"
+                    onChange={handleChange}
+                    style={{ display: 'none' }}
+                />
+                </label>
+                {photo && (
+                <button disabled={!photo} onClick={handleClick}>
+                    Upload
+                </button>
+                )}
+            </div>
+            )}
             
         </UserFormStyled>
     );
