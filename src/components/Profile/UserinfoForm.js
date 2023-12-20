@@ -416,6 +416,7 @@ const UserFormStyled = styled.form`
         height: 100px;
         position: absolute;
         top: 200px;
+        right: 50px;
         display: flex;
         align-items: center;
         gap: 1rem;
