@@ -5,10 +5,19 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useGlobalContext } from '../../context/globalContext';
 import Button from '../Button/Button';
 import { plus } from '../../utils/Icons';
-
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 function ExpenseForm() {
-    const {addExpense, error, setError} = useGlobalContext()
+    
+    const {addExpense, error, setError, userinfo} = useGlobalContext()
+    const {totalExpenses, totalExpensesDay, totalExpensesMonth, totalExpensesYear} = useGlobalContext()
+
+    const currentDate = new Date(); // current date
+    const currentDayTotal = totalExpensesDay(currentDate);
+    const currentMonthTotal = totalExpensesMonth(currentDate.getMonth(), currentDate.getFullYear());
+    const currentYearTotal = totalExpensesYear(currentDate.getFullYear());
+    
     const [inputState, setInputState] = useState({
         title: '',
         amount: '',
@@ -21,22 +30,42 @@ function ExpenseForm() {
 
     const handleInput = name => e => {
         setInputState({...inputState, [name]: e.target.value})
-        setError('')
+        setError(null)
     }
 
-    const handleSubmit = e => {
-        e.preventDefault()
-        addExpense(inputState)
-        setInputState({
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+      
+        try {
+          await addExpense(inputState);
+      
+          // Reset the form
+          setInputState({
             title: '',
             amount: '',
             date: '',
             category: '',
             description: '',
-        })
-    }
+          });
+      
+          if (currentDayTotal > userinfo.spending_limit_day) {
+            NotificationManager.warning('You have reached the expense limit for the day', 'Warning');
+          }
+          if (currentMonthTotal > userinfo.spending_limit_month) {
+            NotificationManager.warning('You have reached the expense limit for the month', 'Warning');
+          }
+          if (currentYearTotal > userinfo.spending_limit_year) {
+            NotificationManager.warning('You have reached the expense limit for the year', 'Warning');
+          }
+          NotificationManager.success('Expense added successfully!', 'Success');
+        } catch (error) {
+          NotificationManager.error('Failed to add expense. Please try again.', 'Error');
+        }
+      };
 
     return (
+        <>
+        <NotificationContainer />
         <ExpenseFormStyled onSubmit={handleSubmit}>
             {error && <p className='error'>{error}</p>}
             <div className="input-control">
@@ -94,6 +123,7 @@ function ExpenseForm() {
                 />
             </div>
         </ExpenseFormStyled>
+        </>
     )
 }
 

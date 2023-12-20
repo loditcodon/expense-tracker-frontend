@@ -8,16 +8,16 @@ import ExpenseForm from './ExpenseForm';
 import { logout, trend } from '../../utils/Icons';
 
 function Expenses() {
-    const {addIncome, expenses, getExpenses, deleteExpense, totalExpenses} = useGlobalContext()
+    const {addIncome, expenses, getExpenses, deleteExpense, totalExpenses, userinfo, totalExpensesDay, totalExpensesMonth, totalExpensesYear} = useGlobalContext()
     const [titlex, setTitle] = useState(""); 
 
     const formatNumberWithCommas = (number) => {
-        return `$ ${number.toLocaleString()}`;
+        return `$ ${number.toLocaleString('en-US')}`;
     };
     const handleChange = (event) => {
         setTitle(event.target.value);
     }
-
+    
     useEffect(() =>{
         getExpenses()
     }, [])

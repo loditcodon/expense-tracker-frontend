@@ -7,7 +7,7 @@ function History() {
 
     const [...history] = transactionHistory()
     const formatNumberWithCommas = (number) => {
-        return number.toLocaleString();
+        return number.toLocaleString('en-US');
     };
     return (
         <HistoryStyled>

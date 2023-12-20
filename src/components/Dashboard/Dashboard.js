@@ -11,7 +11,7 @@ import Chart from '../Chart/Chart';
 function Dashboard() {
     const {totalExpenses, incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses, userinfo, getUserinfo, editUserinfo } = useGlobalContext()
     const formatNumberWithCommas = (number) => {
-        return number.toLocaleString();
+        return number.toLocaleString('en-US');
     };
     useEffect(() => {
         getIncomes()

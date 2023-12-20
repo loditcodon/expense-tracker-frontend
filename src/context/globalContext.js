@@ -5,7 +5,7 @@ import AuthService from "../services/auth.service";
 const BASE_URL = "http://localhost:5000/api/v1/";
 const GlobalContext = React.createContext();
 const formatNumberWithCommas = (number) => {
-    return number.toLocaleString(); 
+    return number.toLocaleString('en-US');
 }
 export const GlobalProvider = ({ children }) => {
     const currentUser = AuthService.getCurrentUser();
@@ -98,7 +98,53 @@ export const GlobalProvider = ({ children }) => {
 
         return totalExpense;
     }
-
+    const totalExpensesDay = (targetDate) => {
+        let totalExpense = 0;
+        expenses.forEach((expense) => {
+            const expenseDate = new Date(expense.date);
+            const targetDateObj = new Date(targetDate);
+    
+            if (
+                expenseDate.getDate() === targetDateObj.getDate() &&
+                expenseDate.getMonth() === targetDateObj.getMonth() &&
+                expenseDate.getFullYear() === targetDateObj.getFullYear()
+            ) {
+                totalExpense += expense.amount;
+            }
+        });
+    
+        return totalExpense;
+    };
+    
+    const totalExpensesMonth = (targetMonth, targetYear) => {
+        let totalExpense = 0;
+        expenses.forEach((expense) => {
+            const expenseDate = new Date(expense.date);
+    
+            if (
+                expenseDate.getMonth() === targetMonth &&
+                expenseDate.getFullYear() === targetYear
+            ) {
+                totalExpense += expense.amount;
+            }
+        });
+    
+        return totalExpense;
+    };
+    
+    const totalExpensesYear = (targetYear) => {
+        let totalExpense = 0;
+        expenses.forEach((expense) => {
+            const expenseDate = new Date(expense.date);
+    
+            if (expenseDate.getFullYear() === targetYear) {
+                totalExpense += expense.amount;
+            }
+        });
+    
+        return totalExpense;
+    };
+    
     const totalBalance = () => {
         return totalIncome() - totalExpenses();
     }
@@ -212,14 +258,14 @@ export const GlobalProvider = ({ children }) => {
                 }
             });
             
-            if (response.data && response.data.error) {
-                setError(response.data.error);
+            if (response.data) {
+                setError(response.data);
                 setTimeout(() => {
                     setError(null);
                 }, 3000);
             }
         } catch (err) {
-            setError(err.response.data.error);
+            setError(err.response.data.message);
             setTimeout(() => {
                 setError(null);
             }, 3000);
@@ -247,7 +293,10 @@ export const GlobalProvider = ({ children }) => {
             editPassword,
             addSpendingLimitsDay,
             addSpendingLimitsMonth,
-            addSpendingLimitsYear
+            addSpendingLimitsYear,
+            totalExpensesDay,
+            totalExpensesMonth,
+            totalExpensesYear
         }}>
             {children}
         </GlobalContext.Provider>

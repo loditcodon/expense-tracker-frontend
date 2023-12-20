@@ -6,86 +6,132 @@ import AuthService from "../../services/auth.service";
 import avatar from '../../img/avatar.png'
 
 function Expenseslimit() {
-    const { userinfo, getUserinfo, addSpendingLimitsDay, addSpendingLimitsMonth, addSpendingLimitsYear, error, setError, expenses } = useGlobalContext();
-    const [inputState, setInputState] = useState({
-        spending_limit_day: userinfo.spending_limit_day,
-        spending_limit_month: userinfo.spending_limit_month,
-        spending_limit_year: userinfo.spending_limit_year,
-    });
+    
+  const { userinfo, getUserinfo, addSpendingLimitsDay, addSpendingLimitsMonth, addSpendingLimitsYear, error, setError } = useGlobalContext();
+  
+  const [inputState, setInputState] = useState({
+      spending_limit_day: userinfo.spending_limit_day,
+      spending_limit_month: userinfo.spending_limit_month,
+      spending_limit_year: userinfo.spending_limit_year,
+  });
 
-    const { spending_limit_day, spending_limit_month, spending_limit_year} = inputState;
-    const handleInput = (name) => (e) => {
-        setInputState({ ...inputState, [name]: e.target.value });
-        setError('');
-    };
-    const handleProfileUpdate = async (e) => {
-        e.preventDefault();
-        await addSpendingLimitsDay(inputState)
-        await addSpendingLimitsMonth(inputState)
-        await addSpendingLimitsYear(inputState)
-        const updatedUserinfo = await getUserinfo();
-        
-        setInputState({
-            spending_limit_day: updatedUserinfo.spending_limit_day,
-            spending_limit_month: updatedUserinfo.spending_limit_month,
-            spending_limit_year: updatedUserinfo.spending_limit_year,
-        });
-    };
+  const [validationErrors, setValidationErrors] = useState({
+      spending_limit_day: '',
+      spending_limit_month: '',
+      spending_limit_year: '',
+  });
 
-    return (
-        <UserFormStyled>
+  const { spending_limit_day, spending_limit_month, spending_limit_year } = inputState;
+
+  const handleInput = (name) => (e) => {
+      setInputState({ ...inputState, [name]: e.target.value });
+      setValidationErrors({ ...validationErrors, [name]: '' });
+      setError('');
+  };
+
+  const validateForm = () => {
+    const errors = {};
+
+    // Validate spending_limit_day
+    if (spending_limit_day === '' || spending_limit_day < 0) {
+        errors.spending_limit_day = 'Expense Limit Day cannot be empty or negative';
+    }
+
+    // Validate spending_limit_month
+    if (spending_limit_month === '' || spending_limit_month < 0) {
+        errors.spending_limit_month = 'Expense Limit Month cannot be empty or negative';
+    }
+    if (spending_limit_month < spending_limit_day) {
+        errors.spending_limit_month = 'Expense Limit Month cannot be less than Spending Limit Day';
+    }    
+
+    // Validate spending_limit_year
+    if (spending_limit_year === '' || spending_limit_year < 0) {
+        errors.spending_limit_year = 'Expense Limit Year cannot be empty or negative';
+    }
+    if (spending_limit_year < spending_limit_month) {
+        errors.spending_limit_month = 'Expense Limit Year cannot be less than Spending Limit Month';
+    } 
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+};
+
+  const handleProfileUpdate = async (e) => {
+      e.preventDefault();
+
+      if (validateForm()) {
+          await addSpendingLimitsDay(inputState);
+          await addSpendingLimitsMonth(inputState);
+          await addSpendingLimitsYear(inputState);
+          const updatedUserinfo = await getUserinfo();
+
+          setInputState({
+              spending_limit_day: updatedUserinfo.spending_limit_day,
+              spending_limit_month: updatedUserinfo.spending_limit_month,
+              spending_limit_year: updatedUserinfo.spending_limit_year,
+          });
+
+      }
+  };
+
+  return (
+      <UserFormStyled>
           {error && <p className="error">{error}</p>}
+          {validationErrors.spending_limit_day && <p className="error">{validationErrors.spending_limit_day}</p>}
+          {validationErrors.spending_limit_month && <p className="error">{validationErrors.spending_limit_month}</p>}
+          {validationErrors.spending_limit_year && <p className="error">{validationErrors.spending_limit_year}</p>}
+
           <div className="input-control">
-            <div className="input-wrapper">
-              <label htmlFor="spending_limit_day">Spending Limit Day</label>
-              <input
-                type="number"
-                value={spending_limit_day}
-                name="spending_limit_day"
-                id="spending_limit_day"
-                placeholder="Spending Limit Day"
-                onChange={handleInput('spending_limit_day')}
-              />
-            </div>
+              <div className="input-wrapper">
+                  <label htmlFor="spending_limit_day">Expense Limit Day</label>
+                  <input
+                      type="number"
+                      value={spending_limit_day}
+                      name="spending_limit_day"
+                      id="spending_limit_day"
+                      placeholder="Expense Limit Day"
+                      onChange={handleInput('spending_limit_day')}
+                  />
+              </div>
           </div>
           <div className="input-control">
-            <div className="input-wrapper">
-              <label htmlFor="spending_limit_month">Spending Limit Month</label>
-              <input
-                type="number"
-                value={spending_limit_month}
-                name="spending_limit_month"
-                id="spending_limit_month"
-                placeholder="Spending Limit Month"
-                onChange={handleInput('spending_limit_month')}
-              />
-            </div>
+              <div className="input-wrapper">
+                  <label htmlFor="spending_limit_month">Expense Limit Month</label>
+                  <input
+                      type="number"
+                      value={spending_limit_month}
+                      name="spending_limit_month"
+                      id="spending_limit_month"
+                      placeholder="Expense Limit Month"
+                      onChange={handleInput('spending_limit_month')}
+                  />
+              </div>
           </div>
           <div className="input-control">
-            <div className="input-wrapper">
-              <label htmlFor="spending_limit_year">Spending Limit Year</label>
-              <input
-                type="number"
-                value={spending_limit_year}
-                name="spending_limit_year"
-                id="spending_limit_year"
-                placeholder="Spending Limit Year"
-                onChange={handleInput('spending_limit_year')}
-              />
-            </div>
+              <div className="input-wrapper">
+                  <label htmlFor="spending_limit_year">Expense Limit Year</label>
+                  <input
+                      type="number"
+                      value={spending_limit_year}
+                      name="spending_limit_year"
+                      id="spending_limit_year"
+                      placeholder="Expense Limit Year"
+                      onChange={handleInput('spending_limit_year')}
+                  />
+              </div>
           </div>
           <div className="submit-btn">
-            <Button
-              name={'Update Profile'}
-              bPad={'.8rem 1.6rem'}
-              bRad={'30px'}
-              bg={'var(--color-accent'}
-              color={'#fff'}
-              onClick={handleProfileUpdate}
-            />
+              <Button
+                  name={'Update'}
+                  bPad={'.8rem 1.6rem'}
+                  bRad={'30px'}
+                  bg={'var(--color-accent'}
+                  color={'#fff'}
+                  onClick={handleProfileUpdate}
+              />
           </div>
-        </UserFormStyled>
-    );
+      </UserFormStyled>
+  );
 }
 
 const UserFormStyled = styled.form`

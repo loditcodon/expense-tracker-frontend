@@ -37,22 +37,96 @@ function UserinfoForm() {
     const handleToggleNewPassword = () => {
         setShowNewPassword(!showNewPassword);
     };
+    const [validationErrors, setValidationErrors] = useState({
+        user_name: '',
+        email: '',
+        phone_number: '',
+        nickname: '',
+    });
+    const [validationPasswordErrors, setValidationPasswordErrors] = useState({
+        oldPassword: '',
+        newPassword: '',
+    });
+    const validateFormPassowrd = () => {
+        const errors = {};
+
+        // Validate oldPassword (optional: add more complex validation)
+        if (!oldPassword.trim()) {
+            errors.oldPassword = 'Old Password is required';
+        }
+
+        // Validate newPassword (optional: add more complex validation)
+        if (newPassword.trim().length < 6) {
+            errors.newPassword = 'New Password must be at least 6 characters';
+        }
+
+        setValidationPasswordErrors(errors);
+        return Object.keys(errors).length === 0; // Return true if there are no errors
+    };
+    const validateForm = () => {
+        const errors = {};
+
+        // Validate user_name
+        if (!user_name.trim()) {
+            errors.user_name = 'Username is required';
+        }
+
+        // Validate email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            errors.email = 'Invalid email address';
+        }
+
+        // Validate phone_number
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(phone_number)) {
+            errors.phone_number = 'Invalid phone number (10 digits)';
+        }
+
+        // Validate nickname
+        if (!nickname.trim()) {
+            errors.nickname = 'Nickname is required';
+        }
+
+        // Validate oldPassword (optional: add more complex validation)
+        if (!oldPassword.trim()) {
+            errors.oldPassword = 'Old Password is required';
+        }
+
+        // Validate newPassword (optional: add more complex validation)
+        if (newPassword.trim().length < 6) {
+            errors.newPassword = 'New Password must be at least 6 characters';
+        }
+
+        setValidationErrors(errors);
+        return Object.keys(errors).length === 0; // Return true if there are no errors
+    };
+
     const handleProfileUpdate = async (e) => {
         e.preventDefault();
-        await editUserinfo(inputState)
-        const updatedUserinfo = await getUserinfo();
-        
-        setInputState({
-            user_name: updatedUserinfo.user_name,
-            email: updatedUserinfo.email,
-            phone_number: updatedUserinfo.phone_number,
-            nickname: updatedUserinfo.nickname,
-        });
+
+        if (validateForm()) {
+            await editUserinfo(inputState);
+            const updatedUserinfo = await getUserinfo();
+
+            setInputState({
+                user_name: updatedUserinfo.user_name,
+                email: updatedUserinfo.email,
+                phone_number: updatedUserinfo.phone_number,
+                nickname: updatedUserinfo.nickname,
+            });
+            setError('Profile updated successfully!');
+
+        }
     };
+
     const handleChangePassword = async (e) => {
         e.preventDefault();
-        await editPassword(passwordState)
-      };
+
+        if (validateFormPassowrd()) {
+            await editPassword(passwordState);
+        }
+    };
     const currentUser = AuthService.getCurrentUser();
     const [photo, setPhoto] = useState(null);
     const [photoURL, setPhotoURL] = useState(null);
@@ -94,6 +168,12 @@ function UserinfoForm() {
     return (
         <UserFormStyled>
             {error && <p className="error">{error}</p>}
+            {validationPasswordErrors.oldPassword && <p className="error">{validationPasswordErrors.oldPassword}</p>}
+            {validationPasswordErrors.newPassword && <p className="error">{validationPasswordErrors.newPassword}</p>}
+            {validationErrors.user_name && <p className="error">{validationErrors.user_name}</p>}
+            {validationErrors.email && <p className="error">{validationErrors.email}</p>}
+            {validationErrors.phone_number && <p className="error">{validationErrors.phone_number}</p>}
+            {validationErrors.nickname && <p className="error">{validationErrors.nickname}</p>}
             <div className="input-control">
                 
                 <div className="input-wrapper">

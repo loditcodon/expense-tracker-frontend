@@ -9,7 +9,7 @@ function Income() {
     const {addIncome,incomes, getIncomes, deleteIncome, totalIncome} = useGlobalContext()
     const [titlex, setTitle] = useState(""); 
     const formatNumberWithCommas = (number) => {
-        return `$ ${number.toLocaleString()}`;
+        return `$ ${number.toLocaleString('en-US')}`;
     };;
     const handleChange = (event) => {
         setTitle(event.target.value);
