@@ -88,15 +88,6 @@ function UserinfoForm() {
             errors.nickname = 'Nickname is required';
         }
 
-        // Validate oldPassword (optional: add more complex validation)
-        if (!oldPassword.trim()) {
-            errors.oldPassword = 'Old Password is required';
-        }
-
-        // Validate newPassword (optional: add more complex validation)
-        if (newPassword.trim().length < 6) {
-            errors.newPassword = 'New Password must be at least 6 characters';
-        }
 
         setValidationErrors(errors);
         return Object.keys(errors).length === 0; // Return true if there are no errors

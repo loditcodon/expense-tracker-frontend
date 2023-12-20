@@ -26,7 +26,7 @@ import {
   faBriefcaseMedical, 
   faTv, 
   faCircleDot, 
-  faUsers, 
+  faUser, 
   faMoneyCheck
 } from '@fortawesome/free-solid-svg-icons';
 import { faBitcoin } from '@fortawesome/free-brands-svg-icons';
@@ -61,5 +61,5 @@ export const food = <FontAwesomeIcon icon={faBowlFood} />;
 export const medical = <FontAwesomeIcon icon={faBriefcaseMedical} />;
 export const tv = <FontAwesomeIcon icon={faTv} />;
 export const circle = <FontAwesomeIcon icon={faCircleDot} />;
-export const userinfoicon = <FontAwesomeIcon icon={faUsers} />;
+export const userinfoicon = <FontAwesomeIcon icon={faUser} />;
 export const expensesLimitIcon = <FontAwesomeIcon icon={faMoneyCheck} />;
