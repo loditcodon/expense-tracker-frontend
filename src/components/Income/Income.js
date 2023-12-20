@@ -4,12 +4,12 @@ import { useGlobalContext } from '../../context/globalContext';
 import { InnerLayout } from '../../styles/Layouts';
 import Form from '../Form/Form';
 import IncomeItem from '../IncomeItem/IncomeItem';
-
+import { dollar  } from '../../utils/Icons';
 function Income() {
     const {addIncome,incomes, getIncomes, deleteIncome, totalIncome} = useGlobalContext()
     const [titlex, setTitle] = useState(""); 
     const formatNumberWithCommas = (number) => {
-        return `$ ${number.toLocaleString('en-US')}`;
+        return `${number.toLocaleString('en-US')}`;
     };;
     const handleChange = (event) => {
         setTitle(event.target.value);
@@ -21,7 +21,7 @@ function Income() {
         <IncomeStyled>
             <InnerLayout>
                 <h1>Incomes</h1>
-                <h2 className="total-income">Total Income: <span>${totalIncome()}</span></h2>
+                <h2 className="total-income">Total Income: <span>{dollar}{totalIncome()}</span></h2>
                 <div className="income-content">
                     <div className="form-container">
                         <Form />

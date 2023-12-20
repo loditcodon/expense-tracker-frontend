@@ -5,7 +5,8 @@ import { BrowserRouter } from "react-router-dom";
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import { GlobalProvider } from './context/globalContext';
+import { GlobalStyle } from './styles/GlobalStyle';
 ReactDOM.render(
   <BrowserRouter>
     <App />

@@ -1,30 +1,65 @@
-export const dashboard = <i className="fa-solid fa-chart-line"></i>
-export const transactions = <i className="fa-solid fa-credit-card"></i>
-export const categories = <i className="fa-solid fa-tags"></i>
-export const accounts = <i className="fa-solid fa-wallet"></i>
-export const settings = <i className="fa-solid fa-cog"></i>
-export const logout = <i className="fa-solid fa-sign-out"></i>
-export const trend = <i className="fa-solid fa-money-bill-trend-up"></i>
-export const expenses = <i className="fa-solid fa-money-bill-transfer"></i>
-export const money = <i className="fa-solid fa-money-bill"></i>
-export const freelance = <i className ="fa-solid fa-earth-americas"></i>
-export const stocks = <i className="fa-solid fa-arrow-trend-up"></i>
-export const bitcoin = <i className="fa-brands fa-bitcoin"></i>
-export const piggy = <i className="fa-solid fa-piggy-bank"></i>
-export const yt = <i className="fa-brands fa-youtube"></i>
-export const card = <i className="fa-brands fa-cc-visa"></i>
-export const users = <i className="fa-solid fa-users-between-lines"></i>
-export const dollar = <i className="fa-solid fa-dollar-sign"></i>
-export const calender = <i className="fa-solid fa-calendar"></i>
-export const comment = <i className="fa-solid fa-comment"></i>
-export const plus = <i className="fa-solid fa-plus"></i>
-export const trash = <i className="fa-solid fa-trash"></i>
-export const signout = <i className="fa-solid fa-right-from-bracket"></i>
-export const takeaway = <i className="fa-solid fa-utensils"></i>
-export const clothing = <i className="fa-solid fa-shirt"></i>
-export const book = <i className="fa-solid fa-book-open"></i>
-export const food = <i className="fa-solid fa-bowl-food"></i>
-export const medical = <i className="fa-solid fa-briefcase-medical"></i>
-export const tv = <i className="fa-solid fa-tv"></i>
-export const circle = <i className="fa-solid fa-circle-dot"></i>
-export const userinfoicon = <i className="fa fa-users"></i>
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faChartLine, 
+  faCreditCard, 
+  faTags, 
+  faWallet, 
+  faCog, 
+  faSignOut, 
+  faMoneyBillTrendUp, 
+  faMoneyBillTransfer, 
+  faMoneyBill, 
+  faEarthAmericas, 
+  faArrowTrendUp, 
+  faPiggyBank, 
+  faUsersBetweenLines, 
+  faDollarSign, 
+  faCalendar, 
+  faComment, 
+  faPlus, 
+  faTrash, 
+  faRightFromBracket, 
+  faUtensils, 
+  faShirt, 
+  faBookOpen, 
+  faBowlFood, 
+  faBriefcaseMedical, 
+  faTv, 
+  faCircleDot, 
+  faUsers, 
+  faMoneyCheck
+} from '@fortawesome/free-solid-svg-icons';
+import { faBitcoin } from '@fortawesome/free-brands-svg-icons';
+import { faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { faCcVisa  } from '@fortawesome/free-brands-svg-icons';
+export const dashboard = <FontAwesomeIcon icon={faChartLine} />;
+export const transactions = <FontAwesomeIcon icon={faCreditCard} />;
+export const categories = <FontAwesomeIcon icon={faTags} />;
+export const accounts = <FontAwesomeIcon icon={faWallet} />;
+export const settings = <FontAwesomeIcon icon={faCog} />;
+export const logout = <FontAwesomeIcon icon={faSignOut} />;
+export const trend = <FontAwesomeIcon icon={faMoneyBillTrendUp} />;
+export const expenses = <FontAwesomeIcon icon={faMoneyBillTransfer} />;
+export const money = <FontAwesomeIcon icon={faMoneyBill} />;
+export const freelance = <FontAwesomeIcon icon={faEarthAmericas} />;
+export const stocks = <FontAwesomeIcon icon={faArrowTrendUp} />;
+export const bitcoin = <FontAwesomeIcon icon={faBitcoin} />;
+export const piggy = <FontAwesomeIcon icon={faPiggyBank} />;
+export const yt = <FontAwesomeIcon icon={faYoutube} />;
+export const card = <FontAwesomeIcon icon={faCcVisa} />;
+export const users = <FontAwesomeIcon icon={faUsersBetweenLines} />;
+export const dollar = <FontAwesomeIcon icon={faDollarSign} />;
+export const calender = <FontAwesomeIcon icon={faCalendar} />;
+export const comment = <FontAwesomeIcon icon={faComment} />;
+export const plus = <FontAwesomeIcon icon={faPlus} />;
+export const trash = <FontAwesomeIcon icon={faTrash} />;
+export const signout = <FontAwesomeIcon icon={faRightFromBracket} />;
+export const takeaway = <FontAwesomeIcon icon={faUtensils} />;
+export const clothing = <FontAwesomeIcon icon={faShirt} />;
+export const book = <FontAwesomeIcon icon={faBookOpen} />;
+export const food = <FontAwesomeIcon icon={faBowlFood} />;
+export const medical = <FontAwesomeIcon icon={faBriefcaseMedical} />;
+export const tv = <FontAwesomeIcon icon={faTv} />;
+export const circle = <FontAwesomeIcon icon={faCircleDot} />;
+export const userinfoicon = <FontAwesomeIcon icon={faUsers} />;
+export const expensesLimitIcon = <FontAwesomeIcon icon={faMoneyCheck} />;

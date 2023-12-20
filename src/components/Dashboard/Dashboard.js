@@ -30,19 +30,19 @@ function Dashboard() {
                             <div className="income">
                                 <h2>Total Income</h2>
                                 <p>
-                                $ {totalIncome()}
+                                {dollar} {totalIncome()}
                                 </p>
                             </div>
                             <div className="expense">
                                 <h2>Total Expense</h2>
                                 <p>
-                                    $ {totalExpenses()}
+                                    {dollar} {totalExpenses()}
                                 </p>
                             </div>
                             <div className="balance">
                                 <h2>Total Balance</h2>
                                 <p>
-                                    $ {totalBalance()}
+                                    {dollar} {totalBalance()}
                                 </p>
                             </div>
                         </div>
@@ -52,19 +52,19 @@ function Dashboard() {
                         <h2 className="salary-title">Min <span>Salary</span>Max</h2>
                         <div className="salary-item">
                             <p>
-                                ${incomes.length > 0 ? formatNumberWithCommas(Math.min(...incomes.map(item => item.amount))) : 'N/A'}
+                                {dollar}{incomes.length > 0 ? formatNumberWithCommas(Math.min(...incomes.map(item => item.amount))) : 'N/A'}
                             </p>
                             <p>
-                                ${incomes.length > 0 ? formatNumberWithCommas(Math.max(...incomes.map(item => item.amount))) : 'N/A'}
+                            {dollar}{incomes.length > 0 ? formatNumberWithCommas(Math.max(...incomes.map(item => item.amount))) : 'N/A'}
                             </p>
                         </div>
                         <h2 className="salary-title">Min <span>Expense</span>Max</h2>
                         <div className="salary-item">
                             <p>
-                                ${expenses.length > 0 ? formatNumberWithCommas(Math.min(...expenses.map(item => item.amount))) : 'N/A'}
+                            {dollar}{expenses.length > 0 ? formatNumberWithCommas(Math.min(...expenses.map(item => item.amount))) : 'N/A'}
                             </p>
                             <p>
-                                ${expenses.length > 0 ? formatNumberWithCommas(Math.max(...expenses.map(item => item.amount))) : 'N/A'}
+                            {dollar}{expenses.length > 0 ? formatNumberWithCommas(Math.max(...expenses.map(item => item.amount))) : 'N/A'}
                             </p>
                         </div>
                     </div>

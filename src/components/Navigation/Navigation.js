@@ -33,7 +33,7 @@ function Navigation({ active, setActive }) {
                 <img src={photoURL || avatar} alt="" />
                 <div className="text">
                     <h2>{userinfo.nickname}</h2>
-                    <p>$ {totalBalance()}</p>
+                    <p>{dollar} {totalBalance()}</p>
                 </div>
             </div>
             <ul className="menu-items">

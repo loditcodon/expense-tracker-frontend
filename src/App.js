@@ -20,6 +20,7 @@ import Expenses from './components/Expenses/Expenses';
 import Userinfo from './components/Profile/Userinfo';
 import Expenseslimit from './components/Expenseslimit/Expenseslimit';
 import { useGlobalContext } from './context/globalContext';
+
 // import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 const App = () => {
@@ -54,6 +55,8 @@ const App = () => {
       case 5: 
         return <Expenseslimit />;
       case 6: 
+        return <Userinfo />;
+      case 7: 
         return <Userinfo />;
       default: 
         return <Dashboard />;

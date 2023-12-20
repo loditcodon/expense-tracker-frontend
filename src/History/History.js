@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useGlobalContext } from '../context/globalContext';
-
+import { dollar  } from '../utils/Icons';
 function History() {
     const {transactionHistory} = useGlobalContext()
 
@@ -29,7 +29,7 @@ function History() {
                                 color: type === 'expense' ? 'red' : 'var(--color-green)',
                             }}
                         >
-                            {type === 'expense' ? `-${formatNumberWithCommas(amount <= 0 ? 0 : amount)}` : `+${formatNumberWithCommas(amount <= 0 ? 0 : amount)}`}$
+                            {type === 'expense' ? `-${formatNumberWithCommas(amount <= 0 ? 0 : amount)}` : `+${formatNumberWithCommas(amount <= 0 ? 0 : amount)}`} {dollar}
                         </p>
                     </div>
                 );
