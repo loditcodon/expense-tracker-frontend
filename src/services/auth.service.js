@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const API_URL = "http://localhost:5000/api/v1/";
+const API_URL = "https://apiexpense.gachcloud.net/api/v1/";
 
 const register = (email, phone_number, user_name, password, nickname) => {
   return axios.post(API_URL + "register", {
