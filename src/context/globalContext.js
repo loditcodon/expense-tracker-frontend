@@ -162,6 +162,69 @@ export const GlobalProvider = ({ children }) => {
             }, 3000);
         }
     };
+    const addSpendingLimitsDay = async (expenseslimitday) => {
+        try {
+            const response = await axios.post(`${BASE_URL}${currentUser}/add-spending-limit-day`, expenseslimitday, {
+                headers: {
+                    'token': accessToken
+                }
+            });
+            
+            if (response.data && response.data.error) {
+                setError(response.data.error);
+                setTimeout(() => {
+                    setError(null);
+                }, 3000);
+            }
+        } catch (err) {
+            setError(err.response.data.error);
+            setTimeout(() => {
+                setError(null);
+            }, 3000);
+        }
+    };
+    const addSpendingLimitsMonth = async (expenseslimitmonth) => {
+        try {
+            const response = await axios.post(`${BASE_URL}${currentUser}/add-spending-limit-mouth`, expenseslimitmonth, {
+                headers: {
+                    'token': accessToken
+                }
+            });
+            
+            if (response.data && response.data.error) {
+                setError(response.data.error);
+                setTimeout(() => {
+                    setError(null);
+                }, 3000);
+            }
+        } catch (err) {
+            setError(err.response.data.error);
+            setTimeout(() => {
+                setError(null);
+            }, 3000);
+        }
+    };
+    const addSpendingLimitsYear = async (expenseslimityear) => {
+        try {
+            const response = await axios.post(`${BASE_URL}${currentUser}/add-spending-limit-year`, expenseslimityear, {
+                headers: {
+                    'token': accessToken
+                }
+            });
+            
+            if (response.data && response.data.error) {
+                setError(response.data.error);
+                setTimeout(() => {
+                    setError(null);
+                }, 3000);
+            }
+        } catch (err) {
+            setError(err.response.data.error);
+            setTimeout(() => {
+                setError(null);
+            }, 3000);
+        }
+    };
     return (
         <GlobalContext.Provider value={{
             addIncome,
@@ -181,7 +244,10 @@ export const GlobalProvider = ({ children }) => {
             getUserinfo,
             editUserinfo,
             userinfo,
-            editPassword
+            editPassword,
+            addSpendingLimitsDay,
+            addSpendingLimitsMonth,
+            addSpendingLimitsYear
         }}>
             {children}
         </GlobalContext.Provider>

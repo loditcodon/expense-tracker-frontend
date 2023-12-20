@@ -2,19 +2,18 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { InnerLayout } from '../../styles/Layouts';
 import { useGlobalContext } from '../../context/globalContext';
-import UserinfoForm from './UserinfoForm';
+import ExpenseslimitForm from './ExpenseslimitForm';
 import Form from '../Form/Form';
-import { logout, trend } from '../../utils/Icons';
 
-function Userinfo() {
+function Expenseslimit() {
     return (
         <UserProfileStyled>
             <InnerLayout>
-                <h1>User Profile</h1>
+                <h1>Expenses Limit</h1>
                 <br></br>
                 <div className="profile-content">
                     <div className="user-form-container">
-                        <UserinfoForm />
+                        <ExpenseslimitForm />
                     </div>
                     {/* Display additional user information here if needed */}
                 </div>
@@ -27,4 +26,4 @@ const UserProfileStyled = styled.div`
 
 `;
 
-export default Userinfo;
+export default Expenseslimit;

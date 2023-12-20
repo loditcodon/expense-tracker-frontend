@@ -27,6 +27,12 @@ export const menuItems = [
     },
     {
         id: 5,
+        title: "Expenses Limit",
+        icon: userinfoicon,
+        link: "/dashboard",
+    },
+    {
+        id: 6,
         title: "Profile",
         icon: userinfoicon,
         link: "/dashboard",

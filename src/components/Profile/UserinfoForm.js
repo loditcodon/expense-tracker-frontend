@@ -3,10 +3,8 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { useGlobalContext } from '../../context/globalContext';
 import Button from '../Button/Button';
-import { upload } from './Firebase'
 import { storage } from "./Firebase";
 import AuthService from "../../services/auth.service";
-import { firebaseConfig } from './Firebase';
 import avatar from '../../img/avatar.png'
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 function UserinfoForm() {
@@ -58,31 +56,41 @@ function UserinfoForm() {
     const currentUser = AuthService.getCurrentUser();
     const [photo, setPhoto] = useState(null);
     const [photoURL, setPhotoURL] = useState(null);
-    function handleChange(e) {
-        if (e.target.files[0]) {
-          setPhoto(e.target.files[0])
-        }
-    }
-    const imageRef = ref(storage, currentUser);
-    getDownloadURL(imageRef)
-        .then((url) => {
-            setPhotoURL(url);
-    })
-    function handleClick() {
+    useEffect(() => {
         const imageRef = ref(storage, currentUser);
-        uploadBytes(imageRef, photo)
-          .then(() => {
-            getDownloadURL(imageRef)
-              .then((url) => {
+        getDownloadURL(imageRef)
+            .then((url) => {
                 setPhotoURL(url);
-              })
-              .catch((error) => {
-              });
-              setPhoto(null);
-          })
-          .catch((error) => {
-          });
-    }
+            })
+            .catch((error) => {
+                console.error('Error fetching photo URL:', error);
+            });
+    }, [currentUser]); // Run this effect when `currentUser` changes
+
+    const handleChange = async (e) => {
+        if (e.target.files[0]) {
+            setPhoto(e.target.files[0]);
+            const temporaryPhotoURL = URL.createObjectURL(e.target.files[0]);
+            setPhotoURL(temporaryPhotoURL);
+        }
+    };
+    const handleClick = async (e) => {
+        e.preventDefault(); // Add this line to prevent default form submission behavior
+        const imageRef = ref(storage, currentUser);
+        
+        try {
+            await uploadBytes(imageRef, photo);
+            const url = await getDownloadURL(imageRef);
+            setPhotoURL(url);
+            setError('Photo uploaded successfully!');
+            setTimeout(() => {
+                setError(null);
+            }, 3000);
+            setPhoto(null)
+        } catch (error) {
+            console.error('Error uploading photo:', error);
+        }
+    };
     return (
         <UserFormStyled>
             {error && <p className="error">{error}</p>}
@@ -197,40 +205,49 @@ function UserinfoForm() {
                     onClick={handleChangePassword}
                 />
             </div>
-            {currentUser && (
-            <div className="avatar-preview">
-                <label htmlFor="avatarInput" className="avatar-label">
-                <img
-                src={photoURL || avatar}
-                alt="Avatar"
-                sx={{ width: 150, height: 150 }}
-                />
-
-                <div className="upload-overlay">
-                    {!photo && (
-                    <>
-                        <span role="img" aria-label="Camera Emoji">
-                        📷
-                        </span>
-                        <p>Upload Photo</p>
-                    </>
-                    )}
-                </div>
-                <input
-                    type="file"
-                    id="avatarInput"
-                    onChange={handleChange}
-                    style={{ display: 'none' }}
-                />
-                </label>
-                {photo && (
-                <button disabled={!photo} onClick={handleClick}>
-                    Upload
-                </button>
+            <div className="avatar-container">
+                {currentUser && (
+                    <div className="avatar-preview user-con">
+                        <label htmlFor="avatarInput" className="avatar-label">
+                            <img
+                                src={photoURL || avatar}
+                                alt="Avatar"
+                            />
+                            <div className="upload-overlay">
+                                {!photo && (
+                                    <>
+                                        <span role="img" aria-label="Camera Emoji">
+                                            📷
+                                        </span>
+                                        <p>Upload Photo</p>
+                                    </>
+                                )}
+                                
+                            </div>
+                            <input
+                                type="file"
+                                id="avatarInput"
+                                onChange={handleChange}
+                                style={{ display: 'none' }}
+                            />
+                            
+                        </label>
+                        {photo && (
+                                    <div className="submitupload-btn">
+                                    <Button
+                                        disabled={!photo}
+                                        name={'Upload'}
+                                        bPad={'.8rem 1.6rem'}
+                                        bRad={'30px'}
+                                        bg={'var(--color-accent'}
+                                        color={'#fff'}
+                                        onClick={handleClick}
+                                    />
+                                    </div>
+                        )}
+                    </div>
                 )}
             </div>
-            )}
-            
         </UserFormStyled>
     );
 }
@@ -310,35 +327,96 @@ const UserFormStyled = styled.form`
         transform: translateY(-50%);
         cursor: pointer;
         font-size: 1.5rem; /* Tùy chỉnh kích thước của biểu tượng */
-    }   
+    }  
+    .avatar-container {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .user-con{
+        height: 100px;
+        position: absolute;
+        top: 200px;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        img{
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #fcf6f9;
+            border: 2px solid #FFFFFF;
+            padding: .2rem;
+            box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.06);
+        }
+        h2{
+            color: rgba(34, 34, 96, 1);
+        }
+        p{
+            color: rgba(34, 34, 96, .6);
+        }
+    } 
     .avatar-label {
         position: relative;
         cursor: pointer;
-      }
-      
-      .upload-overlay {
+        display: flex;
+        flex-direction: column; /* Arrange the items vertically */
+        align-items: center; /* Center items horizontally */
+    }
+    .avatar-container {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .upload-overlay {
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(255, 255, 255, 0.7);
+        background: #fcf6f9; /* Match the background color */
+        border-radius: 50%; /* Add border-radius for a circular shape */
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        opacity: 0;
-        transition: opacity 0.3s ease-in-out;
-      }
-      
-      .upload-overlay span,
-      .upload-overlay p {
+        opacity: 0; /* Set initial opacity to 0 */
+        border: 2px solid #FFFFFF; /* Add border to match the border of user-con */
+        padding: .2rem;
+        box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.06);
+        transition: opacity 0.3s ease-in-out; /* Add transition for smooth opacity change */
+    }
+
+    .upload-overlay span,
+    .upload-overlay p {
         margin: 0;
-      }
-      
-      .avatar-label:hover .upload-overlay {
+        color: rgba(34, 34, 96, 1); /* Match the text color of user-con */
+    }
+
+    .avatar-label:hover .upload-overlay {
         opacity: 1;
-      }
+    }
+
+    /* Add additional styling for the button if needed */
+    .submitupload-btn {
+        position: absolute;
+        align-items: center;
+        left: 0;
+        right: 0;
+        margin-top: 400px; /* Adjust as needed */
+        display: flex;
+        opacity: 1;
+        justify-content: center; /* Center the button horizontally */
+    }
+
+    .submitupload-btn button {
+        box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+        background: var(--color-green);
+        color: #fff;
+        opacity: 1;
+        &:hover {
+            background: var(--color-accent) !important; /* Change to your desired color */
+        }
+    }
 `;
 
 export default UserinfoForm;
