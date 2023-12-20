@@ -120,7 +120,6 @@ export const GlobalProvider = ({ children }) => {
         let totalExpense = 0;
         expenses.forEach((expense) => {
             const expenseDate = new Date(expense.date);
-    
             if (
                 expenseDate.getMonth() === targetMonth &&
                 expenseDate.getFullYear() === targetYear

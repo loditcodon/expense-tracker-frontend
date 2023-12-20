@@ -19,6 +19,7 @@ import Income from './components/Income/Income'
 import Expenses from './components/Expenses/Expenses';
 import Userinfo from './components/Profile/Userinfo';
 import Expenseslimit from './components/Expenseslimit/Expenseslimit';
+import Statistical from './components/Statistical/Statistical';
 import { useGlobalContext } from './context/globalContext';
 
 // import AuthVerify from "./common/AuthVerify";
@@ -55,7 +56,7 @@ const App = () => {
       case 5: 
         return <Expenseslimit />;
       case 6: 
-        return <Userinfo />;
+        return <Statistical />;
       case 7: 
         return <Userinfo />;
       default: 

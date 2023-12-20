@@ -176,6 +176,7 @@ function UserinfoForm() {
                         id="user_name"
                         placeholder="Username"
                         onChange={handleInput('user_name')}
+                        readOnly
                     />
                 </div>
             </div>
