@@ -10,6 +10,7 @@ import AuthService from "./services/auth.service";
 
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
+import Forgotpassword from "./components/Auth/Forgotpassword";
 
 import {MainLayout} from './styles/Layouts'
 import Orb from './components/Orb/Orb'
@@ -114,6 +115,7 @@ const App = () => {
             <Routes>
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/register" element={<Register />} />
+              <Route exact path="/forgotpassword" element={<Forgotpassword />} />
             </Routes>
           </div>
         </>

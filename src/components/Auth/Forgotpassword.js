@@ -16,7 +16,7 @@ const required = (value) => {
   }
 };
 
-const Login = () => {
+const Forgotpassword = () => {
   const form = useRef();
   const checkBtn = useRef();
 
@@ -91,7 +91,7 @@ const Login = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Email</label>
             <Input
               type="password"
               className="form-control"
@@ -107,7 +107,7 @@ const Login = () => {
               {loading && (
                 <span className="spinner-border spinner-border-sm"></span>
               )}
-              <span>Login</span>
+              <span>Send Code</span>
             </button>
           </div>
 
@@ -121,22 +121,14 @@ const Login = () => {
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>
         <div className="text-center">
-          <p style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Link to="/register">Signup here</Link>
-            <span>&nbsp;</span>
-            <Link to="/forgotpassword">Forgot Password</Link>
+          <p>
+          Didn't receive the code?{" "}
+            <Link to="/forgotpassword">Resent Code</Link>.
           </p>
         </div>
-
-        {/* <div className="text-center">
-          <p>
-            Don't have an account?{" "}
-            <Link to="/register">Signup here</Link>.
-          </p>
-        </div> */}
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Forgotpassword;
