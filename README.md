@@ -1,1 +1,1 @@
-remember: npm install
+remember: npm install --force
