@@ -7,7 +7,10 @@ import { storage } from "./Firebase";
 import AuthService from "../../services/auth.service";
 import avatar from '../../img/avatar.png'
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 function UserinfoForm() {
+    
     const { userinfo, getUserinfo, editUserinfo, error, setError, editPassword } = useGlobalContext();
     const [inputState, setInputState] = useState({
         user_name: userinfo.user_name,
@@ -53,6 +56,7 @@ function UserinfoForm() {
         // Validate oldPassword (optional: add more complex validation)
         if (!oldPassword.trim()) {
             errors.oldPassword = 'Old Password is required';
+            NotificationManager.error('Failed to add expense. Please try again.', 'Error');
         }
 
         // Validate newPassword (optional: add more complex validation)
@@ -94,20 +98,27 @@ function UserinfoForm() {
     };
 
     const handleProfileUpdate = async (e) => {
+        if (validateForm()) {
+            NotificationManager.success('Profile updated successfully!', 'Success');
+        }
+        // NotificationManager.success('Profile updated successfully!', 'Success');
         e.preventDefault();
 
         if (validateForm()) {
+            if (error === 'Successfully updated'){
+                setError('');
+            }
             await editUserinfo(inputState);
-            const updatedUserinfo = await getUserinfo();
 
+            const updatedUserinfo = await getUserinfo();
+            
             setInputState({
                 user_name: updatedUserinfo.user_name,
                 email: updatedUserinfo.email,
                 phone_number: updatedUserinfo.phone_number,
                 nickname: updatedUserinfo.nickname,
             });
-            setError('Profile updated successfully!');
-
+            
         }
     };
 
@@ -147,7 +158,7 @@ function UserinfoForm() {
             await uploadBytes(imageRef, photo);
             const url = await getDownloadURL(imageRef);
             setPhotoURL(url);
-            setError('Photo uploaded successfully!');
+            NotificationManager.success('Photo uploaded successfully!', 'Success');
             setTimeout(() => {
                 setError(null);
             }, 3000);
@@ -157,8 +168,9 @@ function UserinfoForm() {
         }
     };
     return (
+        <div>
         <UserFormStyled>
-            {error && <p className="error">{error}</p>}
+            {/* {error && <p className="error">{error}</p>} */}
             {validationPasswordErrors.oldPassword && <p className="error">{validationPasswordErrors.oldPassword}</p>}
             {validationPasswordErrors.newPassword && <p className="error">{validationPasswordErrors.newPassword}</p>}
             {validationErrors.user_name && <p className="error">{validationErrors.user_name}</p>}
@@ -321,6 +333,8 @@ function UserinfoForm() {
                 )}
             </div>
         </UserFormStyled>
+        <NotificationContainer />
+        </div>
     );
 }
 

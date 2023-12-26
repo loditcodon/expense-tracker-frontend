@@ -163,7 +163,6 @@ export const GlobalProvider = ({ children }) => {
             }
         });
         setUserinfo(response.data);
-        
     }
     const editUserinfo = async (userinfo) => {
         try{

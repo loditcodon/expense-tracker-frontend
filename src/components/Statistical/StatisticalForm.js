@@ -56,7 +56,6 @@ function StatisticalForm() {
   };
   const calculateTotal = (expenses) => {
     let total = 0;
-    console.log(expenses);
     expenses.forEach((expense) => {
       total += expense.amount;
     });
@@ -174,15 +173,30 @@ function StatisticalForm() {
           </select>
         </label>
         {chartType === 'month' && (
-          <label>
-            Month:
-            <select value={selectedMonth} onChange={(e) => handleMonthChange(e.target.value)}>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => (
-                <option key={month} value={month}>{month}</option>
-              ))}
-            </select>
-          </label>
-        )}
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div>
+      <label>
+        Month:
+        <select value={selectedMonth} onChange={(e) => handleMonthChange(e.target.value)}>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => (
+            <option key={month} value={month}>{month}</option>
+          ))}
+        </select>
+      </label>
+    </div>
+    <div style={{ marginLeft: '10px' }}>
+      <label>
+        Year:
+        <select value={selectedYear} onChange={(e) => handleYearChange(e.target.value)}>
+          {[2020, 2021, 2022, 2023, 2024].map((year) => (
+            <option key={year} value={year}>{year}</option>
+          ))}
+        </select>
+      </label>
+    </div>
+  </div>
+)}
+
         {chartType === 'year' && (
           <label>
             Year:

@@ -5,7 +5,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useGlobalContext } from '../../context/globalContext';
 import Button from '../Button/Button';
 import { plus } from '../../utils/Icons';
-
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 function Form() {
     const {addIncome, getIncomes, error, setError} = useGlobalContext()
@@ -27,6 +28,7 @@ function Form() {
     const handleSubmit = e => {
         e.preventDefault()
         addIncome(inputState)
+        NotificationManager.success('Income added successfully!', 'Success');
         setInputState({
             title: '',
             amount: '',
@@ -37,6 +39,8 @@ function Form() {
     }
 
     return (
+        <>
+        <NotificationContainer />
         <FormStyled onSubmit={handleSubmit}>
             {error && <p className='error'>{error}</p>}
             <div className="input-control">
@@ -94,6 +98,7 @@ function Form() {
                 />
             </div>
         </FormStyled>
+        </>
     )
 }
 
