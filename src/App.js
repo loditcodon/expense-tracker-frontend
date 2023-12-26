@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -22,13 +22,17 @@ import Userinfo from './components/Profile/Userinfo';
 import Expenseslimit from './components/Expenseslimit/Expenseslimit';
 import Statistical from './components/Statistical/Statistical';
 import { useGlobalContext } from './context/globalContext';
-
+import AccountBox from "./components/Auth/index"
 // import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
+import "./styles.css";
+
 const App = () => {
   const [currentUser, setCurrentUser] = useState(undefined);
   const global = useGlobalContext();
   const [active, setActive] = useState(1);
+  const navigate = useNavigate();
+  const location = useLocation();
   useEffect(() => {
     const user = AuthService.getCurrentUser();
 
@@ -43,7 +47,8 @@ const App = () => {
     return () => {
       EventBus.remove("logout");
     };
-  }, []);
+  }, [navigate, location.pathname]);
+
   const displayData = () => {
     switch(active){
       case 1:
@@ -91,39 +96,24 @@ const App = () => {
         </React.StrictMode>
       ) : (
         <>
-          <nav className="navbar navbar-expand navbar-dark bg-dark">
-            <Link to={"/home"} className="navbar-brand">
-              Expense Tracker
-            </Link>
-    
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to={"/login"} className="nav-link">
-                  Login
-                </Link>
-              </li>
-    
-              <li className="nav-item">
-                <Link to={"/register"} className="nav-link">
-                  Sign Up
-                </Link>
-              </li>
-            </div>
-          </nav>
-    
-          <div className="container mt-3">
-            <Routes>
-              <Route exact path="/login" element={<Login />} />
-              <Route exact path="/register" element={<Register />} />
-              <Route exact path="/forgotpassword" element={<Forgotpassword />} />
-            </Routes>
-          </div>
+          <AppContainer>
+            <AccountBox />
+          </AppContainer>
+          
         </>
       )}
     </div>
   );
 };
-
+const AppContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+`;
 const AppStyled = styled.div`
 height: 100vh;
 background-image: url(${props => props.bg});
