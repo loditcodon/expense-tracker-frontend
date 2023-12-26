@@ -135,7 +135,7 @@ function StatisticalForm() {
       ];
       const optionsincomes = { labels: ["Salary", "Freelancing", "Investments", "Stocks", "Bitcoin", "Bank", "Youtube", "Other"] };
       const incomeSeries = [
-        totalIncomesCategoryYear('money', selectedYear),
+        totalIncomesCategoryYear('salary', selectedYear),
         totalIncomesCategoryYear('freelance', selectedYear),
         totalIncomesCategoryYear('investments', selectedYear),
         totalIncomesCategoryYear('stocks', selectedYear),
