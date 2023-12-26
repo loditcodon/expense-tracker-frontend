@@ -4,6 +4,8 @@ import { useGlobalContext } from '../../context/globalContext';
 import Button from '../Button/Button';
 import AuthService from "../../services/auth.service";
 import avatar from '../../img/avatar.png'
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 function Expenseslimit() {
     
@@ -57,6 +59,9 @@ function Expenseslimit() {
 };
 
   const handleProfileUpdate = async (e) => {
+    if (validateForm()) {
+        NotificationManager.success('Expense Limits updated successfully!', 'Success');
+    }
       e.preventDefault();
 
       if (validateForm()) {
@@ -75,8 +80,9 @@ function Expenseslimit() {
   };
 
   return (
+    <div>
       <UserFormStyled>
-          {error && <p className="error">{error}</p>}
+          {/* {error && <p className="error">{error}</p>} */}
           {validationErrors.spending_limit_day && <p className="error">{validationErrors.spending_limit_day}</p>}
           {validationErrors.spending_limit_month && <p className="error">{validationErrors.spending_limit_month}</p>}
           {validationErrors.spending_limit_year && <p className="error">{validationErrors.spending_limit_year}</p>}
@@ -131,6 +137,8 @@ function Expenseslimit() {
               />
           </div>
       </UserFormStyled>
+      <NotificationContainer />
+      </div>
   );
 }
 
