@@ -56,7 +56,6 @@ function UserinfoForm() {
         // Validate oldPassword (optional: add more complex validation)
         if (!oldPassword.trim()) {
             errors.oldPassword = 'Old Password is required';
-            NotificationManager.error('Failed to add expense. Please try again.', 'Error');
         }
 
         // Validate newPassword (optional: add more complex validation)
@@ -101,7 +100,6 @@ function UserinfoForm() {
         if (validateForm()) {
             NotificationManager.success('Profile updated successfully!', 'Success');
         }
-        // NotificationManager.success('Profile updated successfully!', 'Success');
         e.preventDefault();
 
         if (validateForm()) {
@@ -127,6 +125,12 @@ function UserinfoForm() {
 
         if (validateFormPassowrd()) {
             await editPassword(passwordState);
+            if (error !== 'Wrong password'){
+                NotificationManager.success('Password updated successfully!', 'Success');
+            } else {
+                NotificationManager.error('Wrong password!', 'Error');
+            }
+            console.log(error)
         }
     };
     const currentUser = AuthService.getCurrentUser();

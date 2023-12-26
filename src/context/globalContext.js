@@ -195,15 +195,12 @@ export const GlobalProvider = ({ children }) => {
             
             if (response.data && response.data.error) {
                 setError(response.data.error);
-                setTimeout(() => {
-                    setError(null);
-                }, 3000);
             }
         } catch (err) {
             setError(err.response.data.error);
-            setTimeout(() => {
-                setError(null);
-            }, 3000);
+            // setTimeout(() => {
+            //     setError(null);
+            // }, 3000);
         }
     };
     const addSpendingLimitsDay = async (expenseslimitday) => {
